@@ -3,8 +3,8 @@
 # include <cstdlib>
 # include <vector>
 
-# define CRITICAL_SIZE 4000000000    //slightly less than the maximum amount of memory available for the program
-# define ORIGINAL_SIZE 20
+# define CRITICAL_SIZE 4000000000       //slightly less than the maximum amount of memory available to the program
+# define DEFAULT_SIZE 20                //default size
 
 using std :: vector;
 using namespace std;
@@ -41,7 +41,7 @@ Stack_t <Data_T, Size> :: Stack_t () :
                         stk          ( ),
                         current_pos  (0)
 {
-    if (Size > CRITICAL_SIZE || Size < 0) stk = vector <Data_T> (ORIGINAL_SIZE);
+    if (Size > CRITICAL_SIZE || Size < 0) stk = vector <Data_T> (DEFAULT_SIZE);
     else                                  stk = vector <Data_T> (Size         );
 };
 
@@ -67,7 +67,7 @@ void Stack_t <Data_T, Size> :: Push (Data_T element)
 
     else
     {
-        cout << "i can'Data_T do this operathion, because Stack is full" << endl;
+        cout << "i can't do this operathion, because Stack is full" << endl;
 
         assert ((Dump (), 0));
 
@@ -91,7 +91,7 @@ Data_T Stack_t <Data_T, Size> :: Pop ()
 
     else
     {
-        cout << "i can'Data_T do this operathion, because Stack is empty" << endl;
+        cout << "i can't do this operathion, because Stack is empty" << endl;
 
         assert ((Dump (), 0));
 
@@ -118,7 +118,7 @@ void Stack_t <Data_T, Size> :: Dump ()
 {
     int check_res = Ok ();
 
-    cout << "class Stack (" << check_res << ")" << endl;
+    cout << "class Stack ( state of stack is    " << check_res << ")" << endl;
 
     cout << "{" << endl;
 
