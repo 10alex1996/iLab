@@ -3,7 +3,6 @@
 # include <cstdlib>
 # include <vector>
 
-# define CRITICAL_SIZE 4000000000       //slightly less than the maximum amount of memory available to the program
 # define DEFAULT_SIZE 20                //default size
 
 using std :: vector;
@@ -41,37 +40,26 @@ Stack_t <Data_T, Size> :: Stack_t () :
                         stk          ( ),
                         current_pos  (0)
 {
-    if (Size > CRITICAL_SIZE || Size < 0) stk = vector <Data_T> (DEFAULT_SIZE);
-    else                                  stk = vector <Data_T> (Size         );
+    if   (Size < 0) stk = vector <Data_T> (DEFAULT_SIZE);
+    else            stk = vector <Data_T> (Size        );
 };
 
 
 template <typename Data_T, int Size>
 Stack_t <Data_T, Size> :: ~Stack_t ()
 {
-    assert (Ok () ? 1 : (Dump (), 0));
 }
+
 
 template <typename Data_T, int Size>
 void Stack_t <Data_T, Size> :: Push (Data_T element)
 {
     assert (Ok () ? 1 : (Dump (), 0));
 
-    if (Ok () == true)
-    {
-        if   (stk.size () > current_pos) stk [current_pos] = element ;
-        else                             stk.push_back      (element);
+    if   (stk.size () > current_pos) stk [current_pos] = element ;
+    else                             stk.push_back      (element);
 
-        current_pos++;
-    }
-
-    else
-    {
-        cout << "i can't do this operathion, because Stack is full" << endl;
-
-        assert ((Dump (), 0));
-
-    }
+    current_pos++;
 
     assert (Ok () ? 1 : (Dump (), 0));
 }
@@ -82,7 +70,7 @@ Data_T Stack_t <Data_T, Size> :: Pop ()
 {
     assert (Ok () ? 1 : (Dump (), 0));
 
-    if (Ok () == true && current_pos > 0)
+    if (current_pos > 0)
     {
         current_pos--;
 
@@ -131,10 +119,10 @@ void Stack_t <Data_T, Size> :: Dump ()
     {
         if   (i > current_pos-1)
 
-            cout << "    stk [" << i << "] = " << stk [i] << "*"<< endl;
-
+             cout << "    stk [" << i << "] = " << stk [i] << "*" << endl; //if type of stk doesn't a basic type, function cout
+                                                                           //have to overload
         else
-            cout << "    stk [" << i << "] = " << stk [i] <<       endl;
+             cout << "    stk [" << i << "] = " << stk [i] <<        endl;
     }
 
     cout << "}" << endl;
