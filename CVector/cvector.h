@@ -4,15 +4,17 @@
 
 # define DEBUG
 
-# define Stat 1
+# define STAT 1
 
 #ifdef DEBUG
-    # define Stat cout << __FUNCTION__ << endl;
+    # define STAT cout << __FUNCTION__ << endl;
 #endif
 
-# define Const_link cout << "this func return const link" << endl;
+# define CONST_LINK     cout << "this func return const     link" << endl;
+# define NON_CONST_LINK cout << "this func return non-const link" << endl;
 
-# define Assert(operand, value, name) assert (operand ? 1 : (cout << "\n\n" << __PRETTY_FUNCTION__ << endl, cout << "incorrect value "<< name << " = " << value << "\n\n" << endl, 0))
+# define ASSERT(operand, value, name)\
+    assert (operand ? 1 : (cout << "\n\n" << __PRETTY_FUNCTION__ << endl, cout << "incorrect value "<< name << " = " << value << "\n\n" << endl, 0))
 
 # define EMPTY 0
 
@@ -30,25 +32,25 @@ class CVector
     ~CVector (           );
 
 //basic functions
-    const Data_T & at            (int number_of_element) const;
-          Data_T & at            (int number_of_element)      ;
-    size_t         size          (                     )      ;
+    Data_T & at        (int number_of_element) const;
+    Data_T & at        (int number_of_element)      ;
+    size_t   size      (                     )      ;
 
     void     push_back (Data_T elem);
     void     dump      (           );
 
 //operators
-          Data_T & operator [] (int number_of_element);
-    const Data_T & operator [] (int number_of_element) const;
+    Data_T & operator [] (int number_of_element)      ;
+    Data_T & operator [] (int number_of_element) const;
 
     CVector <Data_T> & operator += (const CVector <Data_T> & operand_right);
 
-    //Data_T & operator +  (const CVector <Data_T> & operand_left, const CVector <Data_T> & operand_right );
+    //CVector <Data_T> & operator +  (const CVector <Data_T> & operand_right);
 
     private :
 
 //check function
-    bool Ok (int number_of_element);
+    bool Ok (int number_of_element) const;
 
 //add_new_boxes
     void add_memory (size_t memory_Size);
@@ -69,9 +71,9 @@ class CVector
 template <typename Data_T>
 CVector <Data_T> :: CVector () :
 
-                    vector_   (NULL     ),
-                    max_size_ (0        ),
-                    cur_pos_  (0        )
+                    vector_   (NULL),
+                    max_size_ (0   ),
+                    cur_pos_  (0   )
 {
 }
 
@@ -96,6 +98,8 @@ template <typename Data_T>
 CVector <Data_T> :: ~CVector ()
 {
     if (vector_ != NULL)  delete [] vector_;
+
+    vector_ = NULL;
 }
 
 
@@ -107,30 +111,33 @@ CVector <Data_T> :: ~CVector ()
 template <typename Data_T>
 Data_T & CVector <Data_T> :: at (int number_of_element)
 {
-    Stat;
+    STAT;
 
-    Assert (Ok (number_of_element), number_of_element, "number_of_element");
+    NON_CONST_LINK;
 
-    return  * ( vector_ + number_of_element);
+    ASSERT (Ok (number_of_element), number_of_element, "number_of_element");
+
+    return ( vector_ [number_of_element]);
 }
 
+
 template <typename Data_T>
-const Data_T & CVector <Data_T> :: at (int number_of_element) const
+Data_T & CVector <Data_T> :: at (int number_of_element) const
 {
-    Stat;
+    STAT;
 
-    Const_link;
+    CONST_LINK;
 
-    Assert (Ok (number_of_element), number_of_element, "number_of_element");
+    ASSERT (Ok (number_of_element), number_of_element, "number_of_element");
 
-    return * ( vector_ + number_of_element);
+    return vector_ [number_of_element];
 }
 
 
 template <typename Data_T>
 size_t CVector <Data_T> :: size ()
 {
-    Stat;
+    STAT;
 
     return cur_pos_;
 }
@@ -139,7 +146,7 @@ size_t CVector <Data_T> :: size ()
 template <typename Data_T>
 void CVector <Data_T> :: push_back (Data_T elem)
 {
-    Stat;
+    STAT;
 
     if (cur_pos_ == max_size_) size_x_2 ();
 
@@ -181,20 +188,19 @@ void CVector <Data_T> :: dump ()
 template <typename Data_T>
 Data_T & CVector <Data_T> :: operator [] (int number_of_element)
 {
-    Stat;
+    STAT;
 
-    cout << "this isn't const reference" << endl;
+    NON_CONST_LINK;
 
     return at (number_of_element);
 }
 
-
 template <typename Data_T>
-Data_T const & CVector <Data_T> :: operator [] (int number_of_element) const
+Data_T & CVector <Data_T> :: operator [] (int number_of_element) const
 {
-    Stat;
+    STAT;
 
-    Const_link;
+    CONST_LINK;
 
     return at (number_of_element);
 }
@@ -203,11 +209,11 @@ Data_T const & CVector <Data_T> :: operator [] (int number_of_element) const
 template <typename Data_T>
 CVector <Data_T> & CVector <Data_T> :: operator += (const CVector <Data_T> & operand_right )
 {
-    Stat;
+    STAT;
 
-    assert (this );
+    assert (this);
 
-    Assert ((operand_right.vector_ != NULL ? 1 : 0), operand_right.vector_, "operand_right.vector_");
+    ASSERT ((operand_right.vector_ != NULL ? 1 : 0), operand_right.vector_, "operand_right.vector_");
 
     add_memory (max_size_ + operand_right.max_size_);
 
@@ -222,9 +228,14 @@ CVector <Data_T> & CVector <Data_T> :: operator += (const CVector <Data_T> & ope
 
 }
 
-    //Data_T & operator + (const CVector <Data_T> & operand_left ,
-                          //const CVector <Data_T> & operand_right );
 
+/*template <typename Data_T>
+CVector <Data_T> & CVector <Data_T> :: operator + (const CVector <Data_T> & operand_right)
+{
+    (* this) += operand_right;
+
+    return *this;
+}*/
 
 
 //========================================================================================
@@ -233,7 +244,7 @@ CVector <Data_T> & CVector <Data_T> :: operator += (const CVector <Data_T> & ope
 //
 //========================================================================================
 template <typename Data_T>
-bool CVector <Data_T> :: Ok (int number_of_element)
+bool CVector <Data_T> :: Ok (int number_of_element) const
 {
     if (max_size_ >= 0 && max_size_ > number_of_element && number_of_element >= 0) return true;
 
@@ -249,9 +260,9 @@ bool CVector <Data_T> :: Ok (int number_of_element)
 template <typename Data_T>
 void CVector <Data_T> :: add_memory (size_t memory_Size)
 {
-    Stat;
+    STAT;
 
-    Assert ((memory_Size > max_size_ ? 1 : 0), memory_Size, "memory_Size");
+    ASSERT ((memory_Size > max_size_ ? 1 : 0), memory_Size, "memory_Size");
 
     size_t old_size = max_size_;
 
@@ -287,7 +298,7 @@ template <typename Data_T>
 void CVector <Data_T> :: size_x_2 ()
 {
 
-    Stat;
+    STAT;
 
     if (max_size_ == 0)
     {

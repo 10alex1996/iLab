@@ -3,7 +3,7 @@
 
 int main ()
 {
-    CVector <int    > array_1 (3);
+    CVector <int> array_1 (3);
     CVector <int> array_2    ;
 
     array_1.push_back(5 );
