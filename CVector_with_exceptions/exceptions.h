@@ -1,3 +1,5 @@
+#include <cassert>
+
 template <typename Vallue_T>
 class exceptions_t
 {

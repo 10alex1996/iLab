@@ -1,5 +1,5 @@
 # include <iostream>
-# include <cassert>
+# include <cstdlib>
 
 
 //# define DEBUG
@@ -131,7 +131,7 @@ CVector <Data_T> :: CVector (size_t Size) :
         LINE;
 #endif
 
-        assert (0);
+        exit (-1);
 
         throw;
     }
@@ -177,7 +177,7 @@ Data_T & CVector <Data_T> :: at (int number_of_element)
     {
         throw;
 
-        //assert (0);
+        //exit (-1);
 
         return vector_ [0];
     }
@@ -302,7 +302,7 @@ Data_T & CVector <Data_T> :: operator [] (int number_of_element)
 
         LINE;
 
-        assert (0);
+        exit (-1);
     }
 
     return value_of_cell;
@@ -324,8 +324,6 @@ CVector <Data_T> & CVector <Data_T> :: operator += (const CVector <Data_T> & ope
 {
     STAT;
 
-    assert (this);
-
     try
     {
         if (operand_right.vector_ == 0)
@@ -343,7 +341,7 @@ CVector <Data_T> & CVector <Data_T> :: operator += (const CVector <Data_T> & ope
 
         LINE;
 #endif
-        assert (0);
+        exit (-1);
     }
 
     try
@@ -357,7 +355,7 @@ CVector <Data_T> & CVector <Data_T> :: operator += (const CVector <Data_T> & ope
 
         LINE;
 
-        assert (0);
+        exit (-1);
     }
 
     for (int i = 0; cur_pos_ < max_size_; cur_pos_++, i++)

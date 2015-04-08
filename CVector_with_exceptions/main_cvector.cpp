@@ -16,7 +16,7 @@ int main ()
 
     array_1.dump ();
 
-    cout << array_2 [1] << endl;
+    cout << array_2 [3] << endl;
 
     return 0;
 }
